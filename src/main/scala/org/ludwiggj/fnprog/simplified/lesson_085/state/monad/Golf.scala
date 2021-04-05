@@ -6,9 +6,33 @@ object Golf {
 
     case class GolfState(distance: Int)
 
-    def swing(distance: Int): State[GolfState, Int] = State { previousState: GolfState =>
-      val newAmount = previousState.distance + distance
-      (GolfState(newAmount), newAmount)
+    // Given a state and an input, how to produce next state
+    def swing(distance: Int): State[GolfState, Int] = State(run = {
+      previousState: GolfState =>
+        val newAmount = previousState.distance + distance
+        (GolfState(newAmount), newAmount)
+    })
+
+    def playDesugared(): Unit = {
+      val stateWithNewDistance: State[GolfState, Int] =
+        swing(distance = 20).flatMap((x: Int) => {
+          println(s"x = $x")
+          swing(distance = 15).flatMap((y: Int) => {
+            println(s"y = $y")
+            swing(distance = 0).map(
+              (totalDistance: Int) => totalDistance
+            )
+          })
+        })
+
+      // initialize a `GolfState`
+      val beginningState = GolfState(0)
+
+      // run/execute the effect.
+      // `run` is like `unsafeRunSync` in the Cats `IO` monad.
+      val result: (GolfState, Int) = stateWithNewDistance.run(beginningState)
+      println(s"GolfState: ${result._1}") // GolfState(35)
+      println(s"Total Distance: ${result._2}") // 35
     }
 
     def play(): Unit = {
@@ -146,11 +170,12 @@ object Golf {
   }
 
   def main(args: Array[String]): Unit = {
-    //    Game.play()
+    // Game.play()
+    Game.playDesugared()
     //    Tournament.ThreeShotGame.play()
     //    Tournament.FourShotGame.play()
     //    Tournament.ThreeShotGameWithMap.play()
     //    Tournament.TwoShotGameFlatmapped.play()
-    Tournament.ForSwings.play()
+    //    Tournament.ForSwings.play()
   }
 }

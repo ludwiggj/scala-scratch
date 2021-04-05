@@ -58,7 +58,7 @@ object CoinToss {
     _ <- if (userInput == "H" || userInput == "T") for {
       // this first line is a hack;
       // a for-expression must begin with a generator
-      _ <- IO { println("you said H or T") }
+      _ <- IO { println(s"you said $userInput") }
       coinTossResult = tossCoin(random)
       newNumFlips = gameState.numFlips + 1
       newGameState = createNewGameState(

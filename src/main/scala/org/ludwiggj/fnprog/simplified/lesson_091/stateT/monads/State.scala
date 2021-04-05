@@ -1,4 +1,4 @@
-package org.ludwiggj.fnprog.simplified.lesson_089.iostate
+package org.ludwiggj.fnprog.simplified.lesson_091.stateT.monads
 
 case class State[S, A](run: S => (S, A)) {
   def flatMap[B](g: A => State[S, B]): State[S, B] = State { s0: S =>

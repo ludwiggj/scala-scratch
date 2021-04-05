@@ -4,13 +4,17 @@ object FunctionInputParameter {
 
   object ClassWithFIP {
 
-    // Given the following definition:
+    // DEFINITION 1: Given the following definition:
 
     // val x = FOO { (a: String) =>
     //  // more code here
     // }
 
-    // A class that takes a function parameter (FIP = Function Input Parameter)
+    // POSSIBILITY 1: A case class that takes a function parameter (FIP = Function Input Parameter)
+
+    // NOTE:          It cannot take a by-name parameter, as that syntax does not compile unless the
+    //                function returns unit (this contradicts page 638).
+    //                See also https://stackoverflow.com/questions/2647141/by-name-parameters-for-constructors
 
     // FIP with String argument
     case class StringToInt(run: String => Int)
@@ -71,16 +75,33 @@ object FunctionInputParameter {
       }
     }
 
+    // POSSIBILITY 2: A function that takes an FIP
+    //                But since it doesn't have any other input, this is effectively an edge case,
+    //                as it cannot depend on any other input. In this example it's the identity function
+    object FunctionWithFIP {
+      def run(): Unit = {
+        def s2i(f: String => Int): String => Int = f
+
+        println(s"Length of Hello is ${
+          val f = s2i { s: String =>
+            s.length
+          }
+
+          // Needs to be explicitly called here
+          f("Hello")
+        }")
+      }
+    }
   }
 
   object FunctionOrClassWithFIP {
-
-    // Given the following definition:
+    // DEFINITION 2: Given the following definition:
 
     // val res = s2i("hello") { s: String =>
     //   s.length
     // }
 
+    // POSSIBILITY 1: A function that takes a FIP
     object FunctionWithFIP {
       def run(): Unit = {
         def s2i(s: String)(f: String => Int): Int = f(s)
@@ -111,6 +132,7 @@ object FunctionInputParameter {
       }
     }
 
+    // POSSIBILITY 2: A case class that takes a FIP
     object ClassWithFIP {
       def run(): Unit = {
         case class s2i(s: String)(f: String => Int) {
@@ -151,14 +173,15 @@ object FunctionInputParameter {
   }
 
   def main(args: Array[String]): Unit = {
-    ClassWithFIP.InlineFIP.run()
-    ClassWithFIP.FIPAsStandalone.run()
-    ClassWithFIP.FIPAsStandaloneVariation.run()
-    ClassWithFIP.InlineFIPGeneric.run()
-    ClassWithFIP.MoreComplexFIP.run()
-    FunctionOrClassWithFIP.FunctionWithFIP.run()
-    FunctionOrClassWithFIP.FunctionWithFIPGeneric.run()
-    FunctionOrClassWithFIP.ClassWithFIP.run()
-    FunctionOrClassWithFIP.ClassWithFIPGeneric.run()
+//    ClassWithFIP.InlineFIP.run()
+//    ClassWithFIP.FIPAsStandalone.run()
+//    ClassWithFIP.FIPAsStandaloneVariation.run()
+//    ClassWithFIP.InlineFIPGeneric.run()
+//    ClassWithFIP.MoreComplexFIP.run()
+//    ClassWithFIP.FunctionWithFIP.run()
+//    FunctionOrClassWithFIP.FunctionWithFIP.run()
+//    FunctionOrClassWithFIP.FunctionWithFIPGeneric.run()
+//    FunctionOrClassWithFIP.ClassWithFIP.run()
+//    FunctionOrClassWithFIP.ClassWithFIPGeneric.run()
   }
 }

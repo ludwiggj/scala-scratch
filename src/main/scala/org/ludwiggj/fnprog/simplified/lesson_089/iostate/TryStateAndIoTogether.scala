@@ -17,22 +17,22 @@ object TryStateAndIoTogether extends App {
 
   // main loop: Prompt a user for some input,
   // then push that input onto a stack
+//    val res = for {
+//      _ <- putStrLn("Type anything:") //IO
+//      input <- getLine //IO
+//      _ <- push(input) //State
+//      _ <- putStrLn(s"Input: $input") //IO
+//    } yield ()
 
-  // TODO - WIP
-
+  // Flatmap and map version
 //  val res =
-//    putStrLn("Type anything:")
-//      .flatMap({ case _ => getLine
-//        .flatMap(input => push(input)
-//          .flatMap { case _ => putStrLn(s"Input: $input")
-//            .map { case _ => () }})})
-
-  /*
-  val res = for {
-    _ <- putStrLn("Type anything:") //IO
-    input <- getLine //IO
-    _ <- push(input) //State
-    _ <- putStrLn(s"Input: $input") //IO
-  } yield ()
-   */
+//    putStrLn("Type anything:").flatMap({ _ =>
+        // This flatMap expects String => IO[B], but is being passed String => State[S,B]
+//        getLine.flatMap(input =>
+          // This flatMap expects Unit => State[S,B], but is being passed String => IO[B]
+//          push(input).flatMap { _ =>
+//              putStrLn(s"Input: $input").map { _ => () }
+//            }
+//        )
+//      })
 }

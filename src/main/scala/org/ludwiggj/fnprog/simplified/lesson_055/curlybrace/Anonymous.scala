@@ -3,13 +3,13 @@ package org.ludwiggj.fnprog.simplified.lesson_055.curlybrace
 object Anonymous {
 
   def main(args: Array[String]): Unit = {
-    // Given the following definition:
+    // DEFINITION 1: Given the following definition:
 
     // val x = FOO {
     //  // more code here
     // }
 
-    // (1) An anonymous class
+    // POSSIBILITY 1: An anonymous class
 
     trait PersonTrait {
       def name: String
@@ -85,7 +85,7 @@ object Anonymous {
 
     println(s"Ernie: $ernie")
 
-    // (2) A function that takes a by-name parameter
+    // POSSIBILITY 2: A function that takes a by-name parameter
 
     def timer[A](blockOfCode: => A) = {
       val startTime = System.nanoTime

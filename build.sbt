@@ -1,4 +1,4 @@
-name := "scalaScratch"
+name := "scala-scratch"
 
 version := "0.1"
 
