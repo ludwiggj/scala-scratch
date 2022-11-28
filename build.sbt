@@ -4,10 +4,7 @@ version := "0.1"
 
 scalaVersion := "2.13.10"
 
-resolvers ++= Seq(
-  Resolver.sonatypeRepo("releases"),
-  Resolver.sonatypeRepo("snapshots")
-)
+resolvers ++= Resolver.sonatypeOssRepos("releases") ++ Resolver.sonatypeOssRepos("snapshots")
 
 libraryDependencies += "org.scalactic" %% "scalactic" % "3.2.14"
 
