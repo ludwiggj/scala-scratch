@@ -1,8 +1,8 @@
-package org.ludwiggj.exploring.taglessfinal.interpreter
+package org.ludwiggj.taglessfinal.exploring.interpreter
 
-import org.ludwiggj.exploring.taglessfinal.NoWrap
-import org.ludwiggj.exploring.taglessfinal.bridge.{ScalaToExtendedLanguageBridge, ScalaToLanguageBridge}
-import org.ludwiggj.exploring.taglessfinal.language.ExtendedLanguage
+import org.ludwiggj.taglessfinal.exploring.NoWrap
+import org.ludwiggj.taglessfinal.exploring.bridge.{ScalaToExtendedLanguageBridge, ScalaToLanguageBridge}
+import org.ludwiggj.taglessfinal.exploring.language.ExtendedLanguage
 
 object ExtendedLanguageInterpreter {
   // This interpreter has an extra method: multiply. It requires a bit of writing.

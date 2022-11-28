@@ -1,8 +1,8 @@
-package org.ludwiggj.exploring.taglessfinal.interpreter
+package org.ludwiggj.taglessfinal.exploring.interpreter
 
-import org.ludwiggj.exploring.taglessfinal.NoWrap
-import org.ludwiggj.exploring.taglessfinal.bridge.ScalaToLanguageBridge
-import org.ludwiggj.exploring.taglessfinal.language.Language
+import org.ludwiggj.taglessfinal.exploring.NoWrap
+import org.ludwiggj.taglessfinal.exploring.bridge.ScalaToLanguageBridge
+import org.ludwiggj.taglessfinal.exploring.language.Language
 
 // We have defined what our meta-language can do. We expressed our problems in the language.
 // Now it’s time to make it run. For instance with an interpreter like this.

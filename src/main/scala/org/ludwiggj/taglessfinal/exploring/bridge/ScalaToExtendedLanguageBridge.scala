@@ -1,7 +1,6 @@
-package org.ludwiggj.exploring.taglessfinal.bridge
+package org.ludwiggj.taglessfinal.exploring.bridge
 
-import org.ludwiggj.exploring.taglessfinal.language.ExtendedLanguage
-
+import org.ludwiggj.taglessfinal.exploring.language.ExtendedLanguage
 import scala.language.higherKinds
 
 trait ScalaToExtendedLanguageBridge[ScalaValue] {

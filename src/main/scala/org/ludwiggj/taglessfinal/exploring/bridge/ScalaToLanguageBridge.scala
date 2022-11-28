@@ -1,6 +1,7 @@
-package org.ludwiggj.exploring.taglessfinal.bridge
+package org.ludwiggj.taglessfinal.exploring.bridge
 
-import org.ludwiggj.exploring.taglessfinal.language.Language
+import org.ludwiggj.taglessfinal.exploring.language.Language
+
 import scala.language.higherKinds
 
 // With a Language in place, we now need to bridge the gap between the hosting language (Scala) and our hosted language.

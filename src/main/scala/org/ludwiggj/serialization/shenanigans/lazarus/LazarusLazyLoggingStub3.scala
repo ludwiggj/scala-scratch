@@ -40,6 +40,6 @@ class LazarusLazyLoggingStub3 extends Serializable  {
     println(">>>>>>>>>>>>>>>>>>>>>>>> Yo Yo Yo!!! <<<<<<<<<<<<<<<<<<<<")
     println(">>>>>>>>>>>>>>>>>>>>>>>> Yo Yo Yo!!! <<<<<<<<<<<<<<<<<<<<")
     in.defaultReadObject()
-    theLogger = newStubbedLogger
+    theLogger = newStubbedLogger()
   }
 }

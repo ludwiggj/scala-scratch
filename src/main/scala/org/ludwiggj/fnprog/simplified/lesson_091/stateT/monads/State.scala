@@ -2,7 +2,7 @@ package org.ludwiggj.fnprog.simplified.lesson_091.stateT.monads
 
 case class State[S, A](run: S => (S, A)) {
   def flatMap[B](g: A => State[S, B]): State[S, B] = State { s0: S =>
-    val (s1: S, a: A) = this.run(s0)
+    val (s1, a) = this.run(s0) // (S, A)
     val newState: (S, B) = g(a).run(s1)
     newState
   }

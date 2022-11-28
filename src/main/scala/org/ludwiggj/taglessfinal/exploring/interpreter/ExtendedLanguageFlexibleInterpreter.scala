@@ -1,8 +1,8 @@
-package org.ludwiggj.exploring.taglessfinal.interpreter
+package org.ludwiggj.taglessfinal.exploring.interpreter
 
-import org.ludwiggj.exploring.taglessfinal.{NoWrap, PrettyPrint}
-import org.ludwiggj.exploring.taglessfinal.bridge.{ScalaToExtendedLanguageBridge, ScalaToLanguageBridge}
-import org.ludwiggj.exploring.taglessfinal.language.{ExtendedLanguage, Language}
+import org.ludwiggj.taglessfinal.exploring.{NoWrap, PrettyPrint}
+import org.ludwiggj.taglessfinal.exploring.bridge.{ScalaToExtendedLanguageBridge, ScalaToLanguageBridge}
+import org.ludwiggj.taglessfinal.exploring.language.{ExtendedLanguage, Language}
 
 import scala.language.higherKinds
 

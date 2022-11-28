@@ -1,4 +1,4 @@
-package org.ludwiggj.exploring.taglessfinal.language
+package org.ludwiggj.taglessfinal.exploring.language
 
 import scala.language.higherKinds
 

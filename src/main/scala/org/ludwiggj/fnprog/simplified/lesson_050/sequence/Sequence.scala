@@ -16,7 +16,7 @@ case class Sequence[A](initialElems: A*) {
   // (2) Supports use as a generator in a for loop with a yield
   def map[B](f: A => B): Sequence[B] = {
     val abMap: ArrayBuffer[B] = elems.map(f)
-    Sequence(abMap: _*)
+    Sequence(abMap.toSeq: _*)
   }
 
   // NOTE: (1) and (2) are independent
@@ -24,7 +24,7 @@ case class Sequence[A](initialElems: A*) {
   // (3) Supports use of if in for loop
   def withFilter(p: A => Boolean): Sequence[A] = {
     val tmpArrayBuffer = elems.filter(p)
-    Sequence(tmpArrayBuffer: _*)
+    Sequence(tmpArrayBuffer.toSeq: _*)
   }
 
   // (4) Supports use of second generator in for loop
@@ -40,7 +40,7 @@ case class Sequence[A](initialElems: A*) {
         xs += e
       }
     }
-    Sequence(xs: _*)
+    Sequence(xs.toSeq: _*)
   }
 }
 

@@ -4,6 +4,7 @@ import org.ludwiggj.cake.animals.not.existential.selftypes.pets.Pet
 import org.mockito.Mockito._
 import org.mockito.invocation.InvocationOnMock
 import org.mockito.stubbing.Answer
+import scala.language.implicitConversions
 
 // See https://www.cakesolutions.net/teamblogs/2011/12/19/cake-pattern-in-depth
 trait MockedVetModule extends VetModule {

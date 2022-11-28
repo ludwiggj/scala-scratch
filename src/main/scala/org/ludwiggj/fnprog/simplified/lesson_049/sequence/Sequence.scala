@@ -15,12 +15,12 @@ case class Sequence[A](initialElems: A*) {
 
   def map[B](f: A => B): Sequence[B] = {
     val abMap: ArrayBuffer[B] = elems.map(f)
-    Sequence(abMap: _*)
+    Sequence(abMap.toSeq: _*)
   }
 
   def withFilter(p: A => Boolean): Sequence[A] = {
     val tmpArrayBuffer = elems.filter(p)
-    Sequence(tmpArrayBuffer: _*)
+    Sequence(tmpArrayBuffer.toSeq: _*)
   }
 }
 

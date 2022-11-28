@@ -1,12 +1,13 @@
 package org.ludwiggj.mocking.trayt
 
 import org.ludwiggj.mocking.User
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
 // Mix in DB directly
 // Similar to UserDBForTesting but in this case, we don’t need an extra class,
 // and the implementation is exactly what our test needs and nothing else.
-class UserRepositorySpec2 extends FlatSpec with Matchers with DB[User, String] {
+class UserRepositorySpec2 extends AnyFlatSpec with Matchers with DB[User, String] {
   // Potentially need to implement everything here
   val users = Seq("Joe", "Nicolas", "Ruth", "Doe", "Maria")
   override def all(): Seq[String] = users

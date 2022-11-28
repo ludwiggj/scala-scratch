@@ -1,8 +1,8 @@
-package org.ludwiggj.exploring.taglessfinal.interpreter
+package org.ludwiggj.taglessfinal.exploring.interpreter
 
-import org.ludwiggj.exploring.taglessfinal.NoWrap
-import org.ludwiggj.exploring.taglessfinal.bridge.{ScalaToExtendedLanguageBridge, ScalaToLanguageBridge}
-import org.ludwiggj.exploring.taglessfinal.language.{ExtendedLanguage, Language}
+import org.ludwiggj.taglessfinal.exploring.NoWrap
+import org.ludwiggj.taglessfinal.exploring.bridge.{ScalaToExtendedLanguageBridge, ScalaToLanguageBridge}
+import org.ludwiggj.taglessfinal.exploring.language.{ExtendedLanguage, Language}
 
 class ExtendedLanguageDelegateInterpreter(l: Language[NoWrap]) extends ExtendedLanguage[NoWrap] {
   override def multiply(a: NoWrap[Int], b: NoWrap[Int]): NoWrap[Int] = a * b

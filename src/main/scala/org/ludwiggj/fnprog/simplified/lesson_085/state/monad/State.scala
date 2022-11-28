@@ -6,7 +6,7 @@ case class State[S, A](run: S => (S, A)) {
   def flatMap[B](g: A => State[S, B]): State[S, B] = State(run = { s0: S =>
     // Run based on current (input) state
     println("Run 1 (before)")
-    val (s1: S, a: A) = this.run(s0)
+    val (s1, a) = this.run(s0) // (S, A)
     println(s"Run 1  (after): $a")
     // Run on the next state
     val newState: (S, B) = g(a).run(s1)

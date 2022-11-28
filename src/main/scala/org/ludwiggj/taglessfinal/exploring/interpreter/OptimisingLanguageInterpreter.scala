@@ -1,8 +1,8 @@
-package org.ludwiggj.exploring.taglessfinal.interpreter
+package org.ludwiggj.taglessfinal.exploring.interpreter
 
-import org.ludwiggj.exploring.taglessfinal.bridge.ScalaToLanguageBridge
-import org.ludwiggj.exploring.taglessfinal.interpreter.OptimisingLanguageInterpreterExample.Nested
-import org.ludwiggj.exploring.taglessfinal.language.Language
+import OptimisingLanguageInterpreterExample.Nested
+import org.ludwiggj.taglessfinal.exploring.bridge.ScalaToLanguageBridge
+import org.ludwiggj.taglessfinal.exploring.language.Language
 
 import scala.language.higherKinds
 

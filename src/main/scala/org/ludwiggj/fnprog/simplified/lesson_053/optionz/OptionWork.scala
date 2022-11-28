@@ -68,8 +68,8 @@ object OptionWork {
 
     println(
       for {
-        a <- intEither("1").right
-        b <- intEither("10").right
+        a <- intEither("1")
+        b <- intEither("10")
       } yield a + b
     )
   }

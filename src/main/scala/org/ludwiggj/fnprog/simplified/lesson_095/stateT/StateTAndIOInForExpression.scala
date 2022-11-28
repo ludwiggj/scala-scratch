@@ -80,7 +80,7 @@ object StateTAndIOInForExpression {
     i <- liftIoIntoStateT(IO(toInt(input)))
     _ <- updateAppState(i)
     _ <- sumLoopWithoutQuitOption
-  } yield Unit
+  } yield ()
 
   def runSumLoopWithoutQuitOption(): Unit = {
     val resultIO: IO[(SumState, Unit)] = sumLoopWithoutQuitOption.run(SumState(0))
@@ -92,13 +92,13 @@ object StateTAndIOInForExpression {
     _ <- putStrAsStateT("\ngive me an int: ")
     input <- getLineAsStateT
     _ <- if (input == "q") {
-      liftIoIntoStateT(IO(Unit))
+      liftIoIntoStateT(IO(()))
     } else for {
       i <- liftIoIntoStateT(IO(toInt(input)))
       _ <- updateAppState(i)
       _ <- sumLoop
-    } yield Unit
-  } yield Unit
+    } yield ()
+  } yield ()
 
   def runSumLoop(): Unit = {
     val result: (SumState, Unit) = sumLoop.run(SumState(0)).run

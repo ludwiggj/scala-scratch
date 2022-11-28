@@ -15,7 +15,8 @@ case class Sequence[A](initialElems: A*) {
 
   def map[B](f: A => B): Sequence[B] = {
     val abMap: ArrayBuffer[B] = elems.map(f)
-    Sequence(abMap: _*)
+
+    Sequence[B](abMap.toSeq:_*)
   }
 }
 

@@ -1,8 +1,8 @@
-package org.ludwiggj.exploring.taglessfinal.interpreter
+package org.ludwiggj.taglessfinal.exploring.interpreter
 
-import org.ludwiggj.exploring.taglessfinal.PrettyPrint
-import org.ludwiggj.exploring.taglessfinal.bridge.ScalaToLanguageBridge
-import org.ludwiggj.exploring.taglessfinal.language.Language
+import org.ludwiggj.taglessfinal.exploring.PrettyPrint
+import org.ludwiggj.taglessfinal.exploring.bridge.ScalaToLanguageBridge
+import org.ludwiggj.taglessfinal.exploring.language.Language
 
 object LanguageInterpreterPrettyPrint {
   val interpret: Language[PrettyPrint] = new Language[PrettyPrint] {

@@ -42,7 +42,7 @@ object LazyBones {
     def streamWithStrictFilterIsLazy(): Unit = {
       println("Stream with strict filter is lazy")
       var found = false
-      Stream.range(1,10).filter(_ % 2 == 1 && !found).foreach(x => if (x == 5) found = true else println(x))
+      LazyList.range(1,10).filter(_ % 2 == 1 && !found).foreach(x => if (x == 5) found = true else println(x))
     }
 
     def listWithLazyFilterIsLazy(): Unit = {
@@ -54,7 +54,7 @@ object LazyBones {
     def streamWithLazyFilterIsLazy(): Unit = {
       println("Stream with lazy filter is lazy")
       var found = false
-      Stream.range(1,10).withFilter(_ % 2 == 1 && !found).foreach(x => if (x == 5) found = true else println(x))
+      LazyList.range(1,10).withFilter(_ % 2 == 1 && !found).foreach(x => if (x == 5) found = true else println(x))
     }
 
     lazyRun()

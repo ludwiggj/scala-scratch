@@ -10,7 +10,7 @@ object FPRecursiveLoop extends App {
       _ <- putStrLn("Type something: ")
       input <- getLine
       _ <- putStrLn(s"You said '$input'.")
-      _ <- if (input == "quit") IOLazy(Unit) else loop //RECURSE
+      _ <- if (input == "quit") IOLazy(()) else loop //RECURSE
     } yield ()
 
     loop.run
@@ -22,7 +22,7 @@ object FPRecursiveLoop extends App {
       _ <- putStrLn("Oy! Type something: ")
       input <- getLine
       _ <- putStrLn(s"You spit '$input'.")
-      _ <- if (input == "quit") IOEager(Unit) else loop //RECURSE
+      _ <- if (input == "quit") IOEager(()) else loop //RECURSE
     } yield ()
 
     loop
@@ -35,7 +35,7 @@ object FPRecursiveLoop extends App {
         getLine
           .flatMap(input => eager.putStrLn(s"You spit '$input'.")
             .flatMap { _ =>
-              (if (input == "quit") IOEager(Unit) else loop)
+              (if (input == "quit") IOEager(()) else loop)
                 .map(_ => ())
             }
           )

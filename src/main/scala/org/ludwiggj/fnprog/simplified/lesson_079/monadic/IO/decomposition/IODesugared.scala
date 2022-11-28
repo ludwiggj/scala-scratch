@@ -15,14 +15,14 @@ object IODesugared {
       _         <- putStrLn("First name?")
       firstName <- getLine
       _         <- putStrLn(s"first: $firstName")
-    } yield Unit
+    } yield ()
 
     doBlock().run()
 
     def doBlockDesugared(): IO[Unit] = putStrLn("First name?").flatMap {_ =>
       getLine.flatMap { firstName =>
         putStrLn(StringContext("first: ", "").s(firstName)).map { _ =>
-          Unit
+          ()
         }
       }
     }

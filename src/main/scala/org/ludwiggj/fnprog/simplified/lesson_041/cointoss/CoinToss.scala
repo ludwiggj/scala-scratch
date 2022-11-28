@@ -9,7 +9,7 @@ object CoinToss {
     print("\n(h)eads, (t)ails, or (q)uit: ")
   }
 
-  def getUserInput: String = StdIn.readLine.trim.toUpperCase
+  def getUserInput: String = StdIn.readLine().trim.toUpperCase
 
   def printableFlipResult(flip: String): String = flip match {
     case "H" => "Heads"

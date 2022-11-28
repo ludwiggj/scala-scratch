@@ -60,8 +60,8 @@ object OrEveryWorkout {
 
     def parsePerson(inputName: String, inputAge: String): Either[String, Person] =
       for {
-        name <- parseName(inputName).right
-        age <- parseAge(inputAge).right
+        name <- parseName(inputName)
+        age <- parseAge(inputAge)
       } yield Person(name, age)
 
     println(parsePerson("Bridget Jones", "29"))

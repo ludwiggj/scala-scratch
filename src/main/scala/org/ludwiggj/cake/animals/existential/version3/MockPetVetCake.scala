@@ -23,7 +23,7 @@ object RunPetStores {
     // This fails as expected
     val bob = MockPetStore.APet("bob")
     MockPetStore.vaccinate(bob)
-    verifyZeroInteractions(MockPetStore.mockVet)
+    verifyNoInteractions(MockPetStore.mockVet)
 
     // BUT it gets messy as soon as we want to verify what is passed into vaccinate
     //     Problem is getting the pet types to line up

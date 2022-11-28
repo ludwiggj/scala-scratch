@@ -40,6 +40,6 @@ trait LazarusLazyLoggingStub extends LazarusLazyLoggingModule with Serializable 
     println(">>>>>>>>>>>>>>>>>>>>>>>> Yo Yo Yo!!! <<<<<<<<<<<<<<<<<<<<")
     println(">>>>>>>>>>>>>>>>>>>>>>>> Yo Yo Yo!!! <<<<<<<<<<<<<<<<<<<<")
     in.defaultReadObject()
-    theLogger = newStubbedLogger
+    theLogger = newStubbedLogger()
   }
 }

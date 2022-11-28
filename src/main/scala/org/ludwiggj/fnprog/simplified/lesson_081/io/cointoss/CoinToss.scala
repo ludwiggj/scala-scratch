@@ -11,7 +11,7 @@ object CoinToss {
   }
 
   // impure
-  private def userInput(): String = StdIn.readLine.trim.toUpperCase
+  private def userInput(): String = StdIn.readLine().trim.toUpperCase
 
   private def printableFlipResult(flip: String) = flip match {
     case "H" => "Heads"
@@ -74,13 +74,13 @@ object CoinToss {
         )
       }
       _ <- mainLoop(newGameState, random)
-    } yield Unit
+    } yield ()
     else for {
       _ <- IO { println("did not enter H or T") }
       _ <- IO { printGameOver() }
       _ <- IO { printGameState(gameState) }
-    } yield Unit
-  } yield Unit
+    } yield ()
+  } yield ()
 
   def main(args: Array[String]): Unit = {
     val s = GameState(0, 0)

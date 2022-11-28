@@ -2,17 +2,18 @@ package org.ludwiggj.mocking.trayt
 
 import org.ludwiggj.mocking.{User, UserId}
 import org.mockito.Mockito._
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class UserRepositorySpec extends FlatSpec with Matchers {
+class UserRepositorySpec extends AnyFlatSpec with Matchers {
 
   it should "always add user take 1" in {
     // Using simple in memory implementation
     val db = new InMemDB
     val userId = UserRepository(db).add(User("Joe"))
 
-    userId shouldBe ("Joe")
-    db.retrieve(userId).get.id shouldBe ("Joe")
+    userId shouldBe "Joe"
+    db.retrieve(userId).get.id shouldBe "Joe"
   }
 
   it should "always add user take 2" in {
@@ -30,8 +31,8 @@ class UserRepositorySpec extends FlatSpec with Matchers {
   it should "select user with short name take 1" in {
 
     // Using a real instance, implementing where necessary
-    val db = new DB[User, String] {
-      val users = Seq("Joe", "Nicolas", "Ruth", "Doe", "Maria")
+    val db: DB[User, UserId] = new DB[User, String] {
+      val users: Seq[UserId] = Seq("Joe", "Nicolas", "Ruth", "Doe", "Maria")
 
       // Potentially need to implement everything here
       override def all(): Seq[String] = users
@@ -57,8 +58,8 @@ class UserRepositorySpec extends FlatSpec with Matchers {
 
   it should "select user with short name take 2" in {
 
-    val db = new UserDBForTesting {
-      val users = Seq("Joe", "Nicolas", "Ruth", "Doe", "Maria")
+    val db: UserDBForTesting = new UserDBForTesting {
+      val users: Seq[UserId] = Seq("Joe", "Nicolas", "Ruth", "Doe", "Maria")
       override def all(): Seq[String] = users
       override def retrieve(id: String): Option[User] = if (users.contains(id)) Some(User(id)) else None
     }

@@ -3,7 +3,7 @@ package org.ludwiggj.cake.example2
 trait StorageComponent {
   type User <: UserLike
 
-  def storeUser(user: User)
+  def storeUser(user: User): Unit
 
   def retrieveUser(id: Int): Option[User]
 

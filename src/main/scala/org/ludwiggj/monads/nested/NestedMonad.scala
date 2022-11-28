@@ -27,10 +27,7 @@ object NestedMonad {
   def getPostsByEmail(email: String): Future[Product with Serializable] = {
     getIdByEmail(email).flatMap({
       case Right(id) =>
-        getPostsById(id).map {
-          case Right(posts) => posts
-          case Left(error) => Left(error)
-        }
+        getPostsById(id)
       case Left(error) => Future {
         Left(error)
       }

@@ -9,7 +9,7 @@ object IOWithTry {
     IOLazy(Try {
       println(s"Attempting to get file $filename")
       val source = io.Source.fromFile(filename)
-      (for (line <- source.getLines) yield line).toList
+      (for (line <- source.getLines()) yield line).toList
     })
   }
 

@@ -17,28 +17,28 @@ class Pizza {
 
   def getCrustSize: CrustSize = _crustSize
 
-  def setCrustSize(cs: CrustSize) {
+  def setCrustSize(cs: CrustSize): Unit = {
     _crustSize = cs
   }
 
   def getCrustType: CrustType = _crustType
 
-  def setCrustType(ct: CrustType) {
+  def setCrustType(ct: CrustType): Unit = {
     _crustType = ct
   }
 
   def getToppings: mutable.Seq[Topping] = _toppings
 
-  def addTopping(t: Topping) {
+  def addTopping(t: Topping): Unit = {
     _toppings += t
   }
 
   // other built-in methods
-  def removeTopping(t: Topping) {
+  def removeTopping(t: Topping): Unit = {
     _toppings -= t
   }
 
-  def removeAllToppings() {
+  def removeAllToppings(): Unit = {
     _toppings.clear()
   }
 

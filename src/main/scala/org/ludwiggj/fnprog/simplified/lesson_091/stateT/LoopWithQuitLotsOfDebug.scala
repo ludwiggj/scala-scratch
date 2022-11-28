@@ -79,7 +79,7 @@ object LoopWithQuitLotsOfDebug extends App {
   }
 
   // new versions of the i/o functions that use StateT
-  def getLineAsStateT(): StateT[IO, SumState, String] = liftIoIntoStateT(getLine)
+  def getLineAsStateT(): StateT[IO, SumState, String] = liftIoIntoStateT(getLine())
 
   def putStrAsStateT(s: String): StateT[IO, SumState, Unit] = liftIoIntoStateT(putStr(s))
 
@@ -88,15 +88,15 @@ object LoopWithQuitLotsOfDebug extends App {
    */
   def sumLoop: StateT[IO, SumState, Unit] = for {
     _ <- putStrAsStateT("\ngive me an int, or 'q' to quit: ")
-    input <- getLineAsStateT
+    input <- getLineAsStateT()
     _ <- if (input == "q") {
-      liftIoIntoStateT(IO(Unit)) //quit
+      liftIoIntoStateT(IO(())) //quit
     } else for {
       i <- liftIoIntoStateT(IO(toInt(input)))
       _ <- doSumWithStateT(i)
       _ <- sumLoop
-    } yield Unit
-  } yield Unit
+    } yield ()
+  } yield ()
 
   val result = sumLoop.run(SumState(0)).run
   println(s"Final SumState: ${result}")
