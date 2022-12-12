@@ -15,21 +15,23 @@ sealed trait Candidate {
 }
 
 object Candidate {
-  class SingleCandidate private[Candidate](val coord: Coord, val value: Int) extends Value with Candidate {
-    override def toString: String = s"Calc($coord,$value)"
+  class Single private[Candidate](val coord: Coord, val value: Int) extends Value with Candidate {
+    override def toString: String = s"Single $coord Value $value)"
   }
 
-  class MultipleCandidate private[Candidate](val coord: Coord, val candidates: Set[Int]) extends Candidate {
+  class Multiple private[Candidate](val coord: Coord, val candidates: Set[Int]) extends Candidate {
     def refine(peerValue: Value): Candidate = {
       // Following works as option is iterable
       val newValues: Set[Int] = candidates -- Option.when(coord.isPeerOf(peerValue.coord))(peerValue.value)
       newValues.toList match {
         case Nil => throw new IllegalStateException()
-        case singleCandidate :: Nil => new SingleCandidate(coord, singleCandidate)
-        case multipleCandidates => new MultipleCandidate(coord, multipleCandidates.toSet)
+        case singleCandidate :: Nil => new Single(coord, singleCandidate)
+        case multipleCandidates => new Multiple(coord, multipleCandidates.toSet)
       }
     }
+
+    override def toString: String = s"Multiple $coord Possibles $candidates"
   }
 
-  def initial(coord: Coord): MultipleCandidate = new MultipleCandidate(coord, (1 to 9).toSet)
+  def initial(coord: Coord): Multiple = new Multiple(coord, (1 to 9).toSet)
 }

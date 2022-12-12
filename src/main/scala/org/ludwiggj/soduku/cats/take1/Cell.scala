@@ -1,7 +1,8 @@
-package org.ludwiggj.soduku.cats.model
+package org.ludwiggj.soduku.cats.take1
 
 import cats.effect.IO
 import cats.effect.kernel.{Deferred, Ref}
+import org.ludwiggj.soduku.cats.model.{Candidate, Coord, Value}
 
 trait Cell {
   def coord: Coord
@@ -25,7 +26,7 @@ object Cell {
 
       override val deferredValue: Deferred[IO, Value] = _deferredValue
 
-      override def deduceSingleCandidate(allCells: List[Cell]): IO[Candidate.SingleCandidate] =
+      override def deduceSingleCandidate(allCells: List[Cell]): IO[Candidate.Single] =
         for {
           refCandidate <- Ref.of[IO, Candidate](Candidate.initial(coord))
           peerCells = allCells.filter(cell => cell.coord.isPeerOf(coord))
@@ -41,16 +42,16 @@ object Cell {
       private def refineToSingleCandidateOrNever(
         refCandidate: Ref[IO, Candidate],
         peerCell: Cell
-      ): IO[Candidate.SingleCandidate] =
+      ): IO[Candidate.Single] =
         for {
           peerValue <- peerCell.getValue
           singleCandidate <- refCandidate.modify {
-            case multiple: Candidate.MultipleCandidate =>
+            case multiple: Candidate.Multiple =>
               multiple.refine(peerValue) match {
-                case single: Candidate.SingleCandidate => (single, IO.pure(single))
-                case multiple: Candidate.MultipleCandidate => (multiple, IO.never)
+                case single: Candidate.Single => (single, IO.pure(single))
+                case multiple: Candidate.Multiple => (multiple, IO.never)
               }
-            case alreadySingle: Candidate.SingleCandidate => (alreadySingle, IO.never)
+            case alreadySingle: Candidate.Single => (alreadySingle, IO.never)
 
           }.flatten
         } yield singleCandidate

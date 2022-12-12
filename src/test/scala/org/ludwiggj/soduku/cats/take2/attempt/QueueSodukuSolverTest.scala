@@ -1,4 +1,4 @@
-package org.ludwiggj.soduku.cats.take1
+package org.ludwiggj.soduku.cats.take2.attempt
 
 import cats.effect.unsafe.implicits.global
 import org.ludwiggj.soduku.Board.{Board, prettyString}
@@ -7,7 +7,7 @@ import org.ludwiggj.soduku.cats.model.{Coord, Value}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
-class DeferredSodukuSolverTest extends AnyFlatSpec with Matchers {
+class QueueSodukuSolverTest extends AnyFlatSpec with Matchers {
   def toBoard(values: List[Value]): Board =
     values.map(_.value).toArray.grouped(9).toArray
 
@@ -45,7 +45,7 @@ class DeferredSodukuSolverTest extends AnyFlatSpec with Matchers {
       Given(Coord(row = 8, col = 8), 9)
     )
 
-    val solution: List[Value] = DeferredSodukuSolver.solve(givens).unsafeRunSync()
+    val solution: List[Value] = QueueSodukuSolver.solve(givens).unsafeRunSync()
     solution.length shouldBe 81
     solution.map(_.value) should not contain 0
 
@@ -93,7 +93,7 @@ class DeferredSodukuSolverTest extends AnyFlatSpec with Matchers {
       Given(Coord(row = 8, col = 7), 8)
     )
 
-    val solution: List[Value] = DeferredSodukuSolver.solve(givens).unsafeRunSync()
+    val solution: List[Value] = QueueSodukuSolver.solve(givens).unsafeRunSync()
     solution.length shouldBe 81
     solution.map(_.value) should not contain 0
 

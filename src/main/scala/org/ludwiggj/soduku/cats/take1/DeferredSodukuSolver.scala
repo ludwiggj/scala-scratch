@@ -2,9 +2,9 @@ package org.ludwiggj.soduku.cats.take1
 
 import cats.effect.IO
 import cats.implicits.{catsSyntaxParallelTraverse1, toTraverseOps}
-import org.ludwiggj.soduku.cats.model.{Cell, Coord, Solver, Value}
+import org.ludwiggj.soduku.cats.model.{Coord, Solver, Value}
 
-object CatsEffectDeferredRefRaceSolver extends Solver[IO] {
+object DeferredSodukuSolver extends Solver[IO] {
   override def solve(givens: List[Value.Given]): IO[List[Value]] =
     for {
       allCells <- Coord.allCoords.traverse(Cell.make)
