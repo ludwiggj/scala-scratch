@@ -5,6 +5,12 @@ sealed trait Value {
   val value: Int
 }
 
+object ValueOrdering extends Ordering[Value] {
+  def compare(a: Value, b:Value): Int = {
+    CoordOrdering.compare(a.coord, b.coord)
+  }
+}
+
 object Value {
   case class Given(coord: Coord, value: Int) extends Value
 }

@@ -13,8 +13,17 @@ object Coord {
   val rowIndices: List[Int] = (0 to 8).toList
   val colIndices: List[Int] = (0 to 8).toList
 
-  val allCoords = for {
+  val allCoords: List[Coord] = for {
     row <- rowIndices
     col <- colIndices
   } yield Coord(row, col)
+}
+
+object CoordOrdering extends Ordering[Coord] {
+  def compare(a: Coord, b:Coord): Int = {
+    val rowCompare: Int = a.row.compare(b.row)
+    val colCompare: Int = a.col.compare(b.col)
+
+    if (rowCompare != 0) rowCompare else colCompare
+  }
 }
