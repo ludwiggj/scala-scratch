@@ -21,7 +21,8 @@ class ProcessArticleSpec extends AnyFlatSpec with Matchers  {
      implicit val eventProducer: ProduceEvent[F] = _ => ().asRight
    }
 
-  trait FixtureWithMondadError extends Fixture {
+  trait FixtureWithMonadError extends Fixture {
+    // This is a bit clumsy
     implicit val em: ArticleError[F] = new ArticleError[F] {
       override def pure[A](x: A): F[A] = x.asRight
       override def flatMap[A, B](fa: F[A])(f: A => F[B]): F[B] = fa.flatMap(f)
@@ -29,17 +30,22 @@ class ProcessArticleSpec extends AnyFlatSpec with Matchers  {
       override def raiseError[A](e: Model.ArticleNotFound): F[A] = e.raiseError
       override def handleErrorWith[A](fa: F[A])(f: Model.ArticleNotFound => F[A]): F[A] = ???
     }
+
+    // TODO - Adam suggested this might work, but it doesn't... :(
+    //        Might need to look into how MonadError construction based on either can be made nicer
+    // import cats.instances.either._
+    // implicit val em2: ArticleError[F] = MonadError[F, ArticleNotFound]
   }
 
-  it should "process article correctly when present in the database - mk" in new Fixture {
-    ProcessArticle.mk[F].process(articleId) shouldEqual expected.asRight
+  it should "(MonadThrow) process article correctly when present in the database" in new Fixture {
+    ProcessArticle.mkWithMonadThrow[F].process(articleId) shouldEqual expected.asRight
+    ProcessArticle.mkWithMonadOriginal[F].process(articleId) shouldEqual expected.asRight
   }
 
-  it should "process article correctly when present in the database - mk2" in new FixtureWithMondadError {
-    ProcessArticle.mkTake2[F].process(articleId) shouldEqual expected.asRight
-  }
-
-  it should "process article correctly when present in the database - mkTake3" in new FixtureWithMondadError {
-    ProcessArticle.mkTake3[F].process(articleId) shouldEqual expected.asRight
+  it should "(MonadError) process article correctly when present in the database" in new FixtureWithMonadError {
+    ProcessArticle.mkWithArticleNotFoundError[F].process(articleId) shouldEqual expected.asRight
+    ProcessArticle.mkWithArticleNotFoundError2[F].process(articleId) shouldEqual expected.asRight
+    ProcessArticle.mkWithArticleNotFoundError3[F].process(articleId) shouldEqual expected.asRight
+    ProcessArticle.mkWithArticleNotFoundError4[F].process(articleId) shouldEqual expected.asRight
   }
 }
