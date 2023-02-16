@@ -46,38 +46,38 @@ class ProcessArticleSpec extends AnyFlatSpec with Matchers {
 
   it should "take1: Process article correctly" in new Fixture[Throwable] {
     ProcessArticle.UsingMonadThrow.mkTake1[F].process(articleId) shouldEqual expectedArticleEvent.asRight
-    actualEvents shouldEqual(expectedEvents)
+    actualEvents shouldEqual expectedEvents
   }
 
   it should "take2: Process article correctly" in new Fixture[Throwable] {
     ProcessArticle.UsingMonadThrow.mkTake2[F].process(articleId) shouldEqual expectedArticleEvent.asRight
-    actualEvents shouldEqual(expectedEvents)
+    actualEvents shouldEqual expectedEvents
   }
 
   behavior of "(MonadError) Process Article (article present)"
 
   it should "take1: Process article correctly" in new Fixture[ArticleNotFound] {
     ProcessArticle.UsingMonadError.mkTake1[F].process(articleId) shouldEqual expectedArticleEvent.asRight
-    actualEvents shouldEqual(expectedEvents)
+    actualEvents shouldEqual expectedEvents
   }
 
   it should "take2: Process article correctly" in new Fixture[ArticleNotFound] {
     ProcessArticle.UsingMonadError.mkTake2[F].process(articleId) shouldEqual expectedArticleEvent.asRight
-    actualEvents shouldEqual(expectedEvents)
+    actualEvents shouldEqual expectedEvents
   }
 
   it should "take3: Process article correctly" in new Fixture[ArticleNotFound] {
     ProcessArticle.UsingMonadError.mkTake3[F].process(articleId) shouldEqual expectedArticleEvent.asRight
-    actualEvents shouldEqual(expectedEvents)
+    actualEvents shouldEqual expectedEvents
   }
 
   it should "take4: Process article correctly" in new Fixture[ArticleNotFound] {
     ProcessArticle.UsingMonadError.mkTake4[F].process(articleId) shouldEqual expectedArticleEvent.asRight
-    actualEvents shouldEqual(expectedEvents)
+    actualEvents shouldEqual expectedEvents
   }
 
   it should "take5: Process article correctly" in new Fixture[ArticleNotFound] {
     ProcessArticle.UsingMonadError.mkTake5[F].process(articleId) shouldEqual expectedArticleEvent.asRight
-    actualEvents shouldEqual(expectedEvents)
+    actualEvents shouldEqual expectedEvents
   }
 }
