@@ -5,5 +5,5 @@ object Model {
 
   final case class ArticleEvent(article: Article, relatedArticles: List[Article])
 
-  final case class ArticleNotFound(id: String)
+  final case class ArticleNotFound(id: String) extends Throwable
 }

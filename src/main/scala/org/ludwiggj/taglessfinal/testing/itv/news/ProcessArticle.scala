@@ -13,7 +13,7 @@ object ProcessArticle {
   object UsingMonadThrow {
     def mkTake1[F[_] : MonadThrow : Log : ArticleRepo : ContentfulClient : ProduceEvent]: ProcessArticle[F] = (id: String) => for {
       maybeArticle <- ArticleRepo[F].get(id)
-      _ <- MonadThrow[F].raiseWhen(maybeArticle.isEmpty)(new RuntimeException(s"Oh dear: ${ArticleNotFound(id)}"))
+      _ <- MonadThrow[F].raiseWhen(maybeArticle.isEmpty)(ArticleNotFound(id))
       article = maybeArticle.get
       relatedArticles <- ContentfulClient[F].articlesByTopic(article.topic)
       event = ArticleEvent(article, relatedArticles.filterNot(_.id == article.id))
@@ -33,7 +33,7 @@ object ProcessArticle {
     def mkTake2[F[_] : MonadThrow : Log : ArticleRepo : ContentfulClient : ProduceEvent]: ProcessArticle[F] = (id: String) => for {
         maybeArticle <- ArticleRepo[F].get(id)
         // NOTE: raiseError is overloaded here (possibly a bad idea in terms of understandability?)
-        article <- maybeArticle.raiseError(new RuntimeException(s"Oh dear: ${ArticleNotFound(id)}"))
+        article <- maybeArticle.raiseError(ArticleNotFound(id))
         relatedArticles <- ContentfulClient[F].articlesByTopic(article.topic)
         event = ArticleEvent(article, relatedArticles.filterNot(_.id == article.id))
         _ <- ProduceEvent[F].produce(event)
@@ -83,8 +83,25 @@ object ProcessArticle {
       _ <- ProduceEvent[F].produce(event)
     } yield event
 
-    // Using fromOption. NOTE: This has exactly same implementation as my own-rolled version, see take 1 above :)
+    // This is the magic sauce
+    implicit class RichOption[A](opt: Option[A]) {
+      def raiseError[F[_] : ArticleError](error: ArticleNotFound): F[A] = opt match {
+        case None => MonadError[F, ArticleNotFound].raiseError(error)
+        case Some(value) => value.pure[F]
+      }
+    }
+
+    // Use extension method - again, overloaded method
     def mkTake4[F[_] : ArticleError : Log : ArticleRepo : ContentfulClient : ProduceEvent]: ProcessArticle[F] = (id: String) => for {
+      maybeArticle <- ArticleRepo[F].get(id)
+      article <- maybeArticle.raiseError(ArticleNotFound(id))
+      relatedArticles <- ContentfulClient[F].articlesByTopic(article.topic)
+      event = ArticleEvent(article, relatedArticles.filterNot(_.id == article.id))
+      _ <- ProduceEvent[F].produce(event)
+    } yield event
+
+    // Using fromOption. NOTE: This has exactly same implementation as my own-rolled version, see take 1 above :)
+    def mkTake5[F[_] : ArticleError : Log : ArticleRepo : ContentfulClient : ProduceEvent]: ProcessArticle[F] = (id: String) => for {
       maybeArticle <- ArticleRepo[F].get(id)
       article <- MonadError[F, ArticleNotFound].fromOption(maybeArticle, ArticleNotFound(id))
       relatedArticles <- ContentfulClient[F].articlesByTopic(article.topic)
@@ -93,7 +110,7 @@ object ProcessArticle {
     } yield event
 
     // Using getOrRaise method from mouse (https://github.com/typelevel/mouse)
-    def mkTake5[F[_] : ArticleError : Log : ArticleRepo : ContentfulClient : ProduceEvent]: ProcessArticle[F] = (id: String) => for {
+    def mkTake6[F[_] : ArticleError : Log : ArticleRepo : ContentfulClient : ProduceEvent]: ProcessArticle[F] = (id: String) => for {
       article <- ArticleRepo[F].get(id).getOrRaise(ArticleNotFound(id))
       relatedArticles <- ContentfulClient[F].articlesByTopic(article.topic)
       event = ArticleEvent(article, relatedArticles.filterNot(_.id == article.id))

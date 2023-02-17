@@ -10,9 +10,9 @@ import org.scalatest.matchers.should.Matchers
 // Immutable, pure functional approach
 class ProcessArticleTake2Spec extends AnyFlatSpec with Matchers {
 
-  trait Fixture[A] {
-    type Error[B] = Either[A, B]
-    type F[B] = WriterT[Error, List[Event], B] // Can log a List of Events, and handle errors
+  trait Fixture[E] {
+    type Error[A] = Either[E, A]
+    type F[A] = WriterT[Error, List[Event], A] // Can log a List of Events, and handle errors
 
     val articleId: String = "20230120_001"
     val article: Article = Article(id = articleId, title = "How to test tagless final", topic = "Testing")
@@ -24,7 +24,7 @@ class ProcessArticleTake2Spec extends AnyFlatSpec with Matchers {
     )
 
     implicit val log: Log[F] = _ =>
-      WriterT.tell[Error, List[Event]](Nil).as(())
+      WriterT.value(())
 
     implicit val repo: ArticleRepo[F] = id =>
       WriterT.tell[Error, List[Event]](List(Event.ArticleFetched(id))).as(article.some)
@@ -69,5 +69,9 @@ class ProcessArticleTake2Spec extends AnyFlatSpec with Matchers {
 
   it should "take5: Process article correctly" in new Fixture[ArticleNotFound] {
     ProcessArticle.UsingMonadError.mkTake5[F].process(articleId).run shouldEqual (expectedEvents, expectedArticleEvent).asRight
+  }
+
+  it should "take6: Process article correctly" in new Fixture[ArticleNotFound] {
+    ProcessArticle.UsingMonadError.mkTake6[F].process(articleId).run shouldEqual (expectedEvents, expectedArticleEvent).asRight
   }
 }

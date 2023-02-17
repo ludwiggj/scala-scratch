@@ -10,8 +10,8 @@ import scala.collection.mutable.ListBuffer
 
 class ProcessArticleSpec extends AnyFlatSpec with Matchers {
 
-  trait Fixture[A] {
-    type F[B] = Either[A, B]
+  trait Fixture[E] {
+    type F[A] = Either[E, A]
 
     val articleId: String = "20230120_001"
     val article: Article = Article(id = articleId, title = "How to test tagless final", topic = "Testing")
@@ -78,6 +78,11 @@ class ProcessArticleSpec extends AnyFlatSpec with Matchers {
 
   it should "take5: Process article correctly" in new Fixture[ArticleNotFound] {
     ProcessArticle.UsingMonadError.mkTake5[F].process(articleId) shouldEqual expectedArticleEvent.asRight
+    actualEvents shouldEqual expectedEvents
+  }
+
+  it should "take6: Process article correctly" in new Fixture[ArticleNotFound] {
+    ProcessArticle.UsingMonadError.mkTake6[F].process(articleId) shouldEqual expectedArticleEvent.asRight
     actualEvents shouldEqual expectedEvents
   }
 }
