@@ -3,6 +3,7 @@ package org.ludwiggj.taglessfinal.testing.itv.news
 import cats.data.{EitherT, Writer, WriterT}
 import cats.implicits.{catsSyntaxEitherId, catsSyntaxOptionId, none, toFunctorOps}
 import cats.instances.either._
+import org.ludwiggj.taglessfinal.testing.itv.news.Event.{ArticleFetched, ContentfulCalled, EventProduced}
 import org.ludwiggj.taglessfinal.testing.itv.news.Model.{Article, ArticleEvent, ArticleNotFound}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -18,20 +19,20 @@ class ProcessArticleTake3Spec extends AnyFlatSpec with Matchers {
     type F[A] = WriterT[Error, List[Event], A] // Can log a List of Events, and handle errors
 
     val expectedEvents: List[Event] = List(
-      Event.ArticleFetched(articleId), Event.ContentfulCalled(article.topic), Event.EventProduced(expectedArticleEvent)
+      ArticleFetched(articleId), ContentfulCalled(article.topic), EventProduced(expectedArticleEvent)
     )
 
     implicit val log: Log[F] = _ =>
       WriterT.value(())
 
     implicit val repo: ArticleRepo[F] = id =>
-      WriterT.tell[Error, List[Event]](List(Event.ArticleFetched(id))).as(article.some)
+      WriterT.tell[Error, List[Event]](List(ArticleFetched(id))).as(article.some)
 
     implicit val contentfulClient: ContentfulClient[F] = topic =>
-      WriterT.tell[Error, List[Event]](List(Event.ContentfulCalled(topic))).as(Nil)
+      WriterT.tell[Error, List[Event]](List(ContentfulCalled(topic))).as(Nil)
 
     implicit val eventProducer: ProduceEvent[F] = articleEvent =>
-      WriterT.tell[Error, List[Event]](List(Event.EventProduced(articleEvent))).as(())
+      WriterT.tell[Error, List[Event]](List(EventProduced(articleEvent))).as(())
   }
 
   behavior of "(MonadThrow) Process Article (article present) (without error events)"
@@ -77,13 +78,13 @@ class ProcessArticleTake3Spec extends AnyFlatSpec with Matchers {
     type Error[A] = Either[E, A]
     type F[A] = WriterT[Error, List[Event], A] // Can log a List of Events, and handle errors
 
-    val expectedEvents: List[Event] = List(Event.ArticleFetched(articleId))
+    val expectedEvents: List[Event] = List(ArticleFetched(articleId))
 
     implicit val log: Log[F] = _ =>
       WriterT.value(())
 
     implicit val repo: ArticleRepo[F] = id =>
-      WriterT.tell[Error, List[Event]](List(Event.ArticleFetched(id))).as(none)
+      WriterT.tell[Error, List[Event]](List(ArticleFetched(id))).as(none)
 
     //noinspection NotImplementedCode
     implicit val contentfulClient: ContentfulClient[F] = _ => ???
@@ -106,7 +107,7 @@ class ProcessArticleTake3Spec extends AnyFlatSpec with Matchers {
     type EventWriter[A] = Writer[List[Event], A]
     type F[A] = EitherT[EventWriter, E, A]
 
-    val expectedEvents: List[Event] = List(Event.ArticleFetched(articleId))
+    val expectedEvents: List[Event] = List(ArticleFetched(articleId))
 
     implicit val log: Log[F] = _ =>
       EitherT.pure(())
@@ -115,7 +116,7 @@ class ProcessArticleTake3Spec extends AnyFlatSpec with Matchers {
     //    F[Option[Article]]
     // => EitherT[EventWriter, E, Option[Article]]
     implicit val repo: ArticleRepo[F] = id => {
-      val writer: EventWriter[Option[Article]] = Writer.tell(List[Event](Event.ArticleFetched(id))).as(none)
+      val writer: EventWriter[Option[Article]] = Writer.tell(List[Event](ArticleFetched(id))).as(none)
       val result: EitherT[EventWriter, E, Option[Article]] = EitherT.liftF(writer)
       result
     }
@@ -170,22 +171,32 @@ class ProcessArticleTake3Spec extends AnyFlatSpec with Matchers {
     type F[A] = EitherT[EventWriter, E, A]
 
     val expectedEvents: List[Event] = List(
-      Event.ArticleFetched(articleId), Event.ContentfulCalled(article.topic), Event.EventProduced(expectedArticleEvent)
+      ArticleFetched(articleId), ContentfulCalled(article.topic), EventProduced(expectedArticleEvent)
     )
+
+    // https://github.com/dantb/unit-testing-either-writer/tree/main
+    // https://itv.slack.com/archives/G7XFWU9HA/p1668781379559659
+    // https://typelevel.org/cats/nomenclature.html
+    // https://www.stackage.org/lts-20.11/hoogle?q=%3D%3E%3E
+    // https://blog.ssanj.net/posts/2017-07-02-working-with-arrows-in-scala.html
+
+    def logEventAndValue[A](l: Event, a: A): EitherT[EventWriter, E, A] =
+    // def logEventAndValue[A](l: Event, a: A): EitherT[[X] =>> Writer[List[Event], X], E, A] =
+      EitherT.liftF(Writer.tell(List(l)).as(a))
 
     implicit val log: Log[F] = _ =>
       EitherT.pure(())
 
     implicit val repo: ArticleRepo[F] = id =>
-      EitherT.liftF(Writer.tell(List[Event](Event.ArticleFetched(id))).as(article.some))
+      logEventAndValue(ArticleFetched(id), article.some)
 
     //noinspection NotImplementedCode
     implicit val contentfulClient: ContentfulClient[F] = topic =>
-      EitherT.liftF(Writer.tell(List[Event](Event.ContentfulCalled(topic))).as(Nil))
+      logEventAndValue(ContentfulCalled(topic), Nil)
 
     //noinspection NotImplementedCode
     implicit val eventProducer: ProduceEvent[F] = articleEvent =>
-      EitherT.liftF(Writer.tell(List[Event](Event.EventProduced(articleEvent))).as(()))
+      logEventAndValue(EventProduced(articleEvent), ())
   }
 
   behavior of "(MonadThrow) Process Article (article present)"
